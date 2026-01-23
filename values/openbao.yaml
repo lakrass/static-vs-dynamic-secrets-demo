@@ -1,0 +1,7 @@
+server:
+  logLevel: debug
+  dev: 
+    enabled: true
+  service: 
+    type: NodePort
+    nodePort: 30082

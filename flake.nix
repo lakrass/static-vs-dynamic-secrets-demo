@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/25.11";
   };
 
   outputs = { self, nixpkgs }:
@@ -32,9 +32,12 @@
       {
         default = pkgs.mkShell {
           packages = with pkgs; [
+            podman
             kubectl
+            kind
             openbao
             opentofu
+            postgresql_18
           ];
 
           buildInputs = [

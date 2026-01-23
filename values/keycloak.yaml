@@ -1,0 +1,21 @@
+postgres:
+  enabled: false
+
+keycloak:
+  httpsEnabled: false
+  adminUser: admin
+  adminPassword: admin
+
+database:
+  host: postgres.postgres.svc.cluster.local
+  username: keycloak
+  password: keycloak
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: localhost
+      paths:
+        - path: /
+          pathType: Prefix

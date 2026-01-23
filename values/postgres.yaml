@@ -1,0 +1,10 @@
+auth:
+  username: postgres
+  password: postgres
+
+customUser:
+  name: keycloak
+  password: keycloak
+
+service:
+  type: NodePort

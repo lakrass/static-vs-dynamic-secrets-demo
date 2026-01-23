@@ -1,0 +1,31 @@
+repositories: 
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
+  - name: openbao
+    url: https://openbao.github.io/openbao-helm
+
+releases: 
+  - name: ingress-nginx
+    namespace: ingress-nginx
+    chart: ingress-nginx/ingress-nginx
+    version: 4.14.1
+    values:
+      - ./values/ingress-nginx.yaml
+  - name: openbao
+    namespace: openbao
+    chart: openbao/openbao
+    version: 0.23.3
+    values:
+      - ./values/openbao.yaml
+  - name: postgres
+    namespace: postgres
+    chart: oci://registry-1.docker.io/cloudpirates/postgres
+    version: 0.14.4
+    values:
+      - ./values/postgres.yaml
+  - name: keycloak
+    namespace: keycloak
+    chart: oci://registry-1.docker.io/cloudpirates/keycloak
+    version: 0.13.0
+    values:
+      - ./values/keycloak.yaml

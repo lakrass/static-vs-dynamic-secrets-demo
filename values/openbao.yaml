@@ -1,7 +1,31 @@
 server:
   logLevel: debug
-  dev: 
+  dev:
     enabled: true
-  service: 
+  updateStrategyType: RollingUpdate
+  service:
     type: NodePort
     nodePort: 30082
+  extraContainers:
+    - name: socat-keycloak-ipv4
+      image: alpine/socat:1.8.0.3
+      args:
+        - "TCP4-LISTEN:8080,fork,reuseaddr,bind=localhost"
+        - "TCP:keycloak.keycloak.svc.cluster.local:8080"
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 65532
+    - name: socat-keycloak-ipv6
+      image: alpine/socat:1.8.0.3
+      args:
+        - "TCP6-LISTEN:8080,fork,reuseaddr,bind=localhost"
+        - "TCP:keycloak.keycloak.svc.cluster.local:8080"
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 65532
+injector:
+  enabled: false

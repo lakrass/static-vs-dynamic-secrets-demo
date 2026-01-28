@@ -81,6 +81,24 @@ resource "vault_database_secret_backend_connection" "pg" {
   ]
 }
 
+resource "vault_policy" "pg_admin" {
+  name   = "pg-admin"
+  policy = <<-EOT
+    path "${vault_mount.db.path}/creds/${vault_database_secret_backend_role.pg_admin.name}" {
+      capabilities = ["read"]
+    }
+  EOT
+}
+
+resource "vault_policy" "pg_user" {
+  name   = "pg-admin"
+  policy = <<-EOT
+    path "${vault_mount.db.path}/creds/${vault_database_secret_backend_role.pg_user.name}" {
+      capabilities = ["read"]
+    }
+  EOT
+}
+
 
 # ssh secrets engine
 resource "vault_mount" "ssh" {
@@ -111,4 +129,13 @@ resource "vault_ssh_secret_backend_role" "default" {
     "permit-pty"     = ""
     "permit-user-rc" = ""
   }
+}
+
+resource "vault_policy" "ssh_user" {
+  name   = "ssh-user"
+  policy = <<-EOT
+    path "${vault_mount.ssh.path}/sign/${vault_ssh_secret_backend_role.default.name}" {
+      capabilities = ["create","update"]
+    }
+  EOT
 }

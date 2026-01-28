@@ -65,3 +65,7 @@ terraform.rc
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/helm,direnv,visualstudiocode,terraform
+
+alice_rsa
+alice_rsa.pub
+alice_signed.pub

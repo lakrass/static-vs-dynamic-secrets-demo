@@ -139,3 +139,34 @@ resource "vault_policy" "ssh_user" {
     }
   EOT
 }
+
+
+# external groups with alias
+resource "vault_identity_group" "team_a" {
+  name = keycloak_group.team_a.name
+  type = "external"
+  policies = [
+    vault_policy.pg_admin.name,
+    vault_policy.ssh_user.name
+  ]
+}
+
+resource "vault_identity_group_alias" "team_a_oidc" {
+  name           = keycloak_group.team_a.name
+  mount_accessor = vault_jwt_auth_backend.oidc.accessor
+  canonical_id   = vault_identity_group.team_a.id
+}
+
+resource "vault_identity_group" "team_b" {
+  name = keycloak_group.team_b.name
+  type = "external"
+  policies = [
+    vault_policy.pg_user.name
+  ]
+}
+
+resource "vault_identity_group_alias" "team_b_oidc" {
+  name           = keycloak_group.team_b.name
+  mount_accessor = vault_jwt_auth_backend.oidc.accessor
+  canonical_id   = vault_identity_group.team_b.id
+}

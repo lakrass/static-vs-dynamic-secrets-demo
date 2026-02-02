@@ -4,6 +4,20 @@ resource "keycloak_realm" "demo" {
   enabled = true
 }
 
+resource "keycloak_realm_events" "realm_events" {
+  realm_id = keycloak_realm.demo.id
+
+  # Enable user events
+  events_enabled = true
+
+  # Enable admin events
+  admin_events_enabled         = true
+  admin_events_details_enabled = true
+
+  events_listeners = [
+    "jboss-logging",
+  ]
+}
 
 # group "team-a"
 resource "keycloak_group" "team_a" {

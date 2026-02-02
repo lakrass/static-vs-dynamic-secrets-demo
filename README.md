@@ -47,7 +47,7 @@ When using `direnv` in addition, it will detect the provided `.envrc` file in th
 
 4. Run `bao login` and you will be prompted fo a token. Use the root token provided in the saved output.
 
-### Configure OpenBAo
+### Configure OpenBao
 
 Run all following commands inside the directory `config`.
 

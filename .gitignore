@@ -69,3 +69,4 @@ terraform.rc
 alice_rsa
 alice_rsa.pub
 alice_signed.pub
+keys.json

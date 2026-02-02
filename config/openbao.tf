@@ -220,3 +220,13 @@ resource "vault_identity_group_alias" "team_b_oidc" {
   mount_accessor = vault_jwt_auth_backend.oidc.accessor
   canonical_id   = vault_identity_group.team_b.id
 }
+
+
+# audit device
+resource "vault_audit" "test" {
+  type = "file"
+
+  options = {
+    file_path = "/openbao/logs/audit.log"
+  }
+}

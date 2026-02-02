@@ -8,3 +8,9 @@ customUser:
 
 service:
   type: NodePort
+
+config:
+  postgresqlLogStatement: all
+  extraConfig:
+    - logging_collector = on
+    - log_directory = '/var/log/postgresql'

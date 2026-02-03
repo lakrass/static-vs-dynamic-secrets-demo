@@ -41,6 +41,9 @@ resource "vault_jwt_auth_backend_role" "default" {
 resource "vault_mount" "db" {
   type = "database"
   path = "database"
+
+  default_lease_ttl_seconds = 300
+  max_lease_ttl_seconds     = 900
 }
 
 resource "vault_database_secret_backend_role" "pg_user" {
@@ -112,6 +115,9 @@ resource "vault_policy" "pg_user" {
 resource "vault_mount" "ssh" {
   path = "ssh"
   type = "ssh"
+
+  default_lease_ttl_seconds = 300
+  max_lease_ttl_seconds     = 900
 }
 
 resource "vault_ssh_secret_backend_ca" "ssh" {

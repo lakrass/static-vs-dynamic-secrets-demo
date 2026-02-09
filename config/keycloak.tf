@@ -102,11 +102,11 @@ resource "keycloak_openid_group_membership_protocol_mapper" "groups_mapper" {
 }
 
 
-# openid client for OpenBao with custom scopes assigned
-resource "keycloak_openid_client" "openbao" {
+# openid client for Vault with custom scopes assigned
+resource "keycloak_openid_client" "vault" {
   realm_id = keycloak_realm.demo.id
 
-  client_id = "openbao"
+  client_id = "vault"
   enabled   = true
 
   access_type           = "CONFIDENTIAL"
@@ -137,9 +137,9 @@ resource "keycloak_realm_default_client_scopes" "default_scopes" {
   ]
 }
 
-resource "keycloak_openid_client_default_scopes" "openbao_scope_default" {
+resource "keycloak_openid_client_default_scopes" "vault_scope_default" {
   realm_id  = keycloak_realm.demo.id
-  client_id = keycloak_openid_client.openbao.id
+  client_id = keycloak_openid_client.vault.id
 
   default_scopes = [
     keycloak_openid_client_scope.groups.name,

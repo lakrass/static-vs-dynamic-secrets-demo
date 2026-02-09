@@ -10,9 +10,8 @@ server:
         cluster_address = "[::]:8201"
       }
       storage "file" {
-        path = "/openbao/data"
+        path = "/vault/data"
       }
-      unsafe_allow_api_audit_creation = true
   updateStrategyType: RollingUpdate
   service:
     type: NodePort

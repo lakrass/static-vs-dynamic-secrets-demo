@@ -1,22 +1,22 @@
-repositories: 
+repositories:
   - name: ingress-nginx
     url: https://kubernetes.github.io/ingress-nginx
-  - name: openbao
-    url: https://openbao.github.io/openbao-helm
+  - name: hashicorp
+    url: https://helm.releases.hashicorp.com
 
-releases: 
+releases:
   - name: ingress-nginx
     namespace: ingress-nginx
     chart: ingress-nginx/ingress-nginx
     version: 4.14.1
     values:
       - ./values/ingress-nginx.yaml
-  - name: openbao
-    namespace: openbao
-    chart: openbao/openbao
-    version: 0.23.3
+  - name: vault
+    namespace: vault
+    chart: hashicorp/vault
+    version: 0.32.0
     values:
-      - ./values/openbao.yaml
+      - ./values/vault.yaml
   - name: postgres
     namespace: postgres
     chart: oci://registry-1.docker.io/cloudpirates/postgres

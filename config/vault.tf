@@ -1,11 +1,11 @@
 # oidc auth
 resource "vault_jwt_auth_backend" "oidc" {
-  depends_on = [keycloak_openid_client.openbao]
+  depends_on = [keycloak_openid_client.vault]
   type       = "oidc"
   path       = "oidc"
 
-  oidc_client_id     = keycloak_openid_client.openbao.client_id
-  oidc_client_secret = keycloak_openid_client.openbao.client_secret
+  oidc_client_id     = keycloak_openid_client.vault.client_id
+  oidc_client_secret = keycloak_openid_client.vault.client_secret
   oidc_discovery_url = "http://localhost:8080/realms/demo"
   bound_issuer       = "http://localhost:8080/realms/demo"
 
@@ -22,7 +22,7 @@ resource "vault_jwt_auth_backend_role" "default" {
   role_name      = "default"
   token_policies = ["default"]
 
-  bound_audiences = [keycloak_openid_client.openbao.client_id]
+  bound_audiences = [keycloak_openid_client.vault.client_id]
 
   user_claim   = "sub"
   groups_claim = keycloak_openid_client_scope.groups.name
@@ -32,7 +32,7 @@ resource "vault_jwt_auth_backend_role" "default" {
     preferred_username = "ssh-user"
   }
 
-  allowed_redirect_uris = keycloak_openid_client.openbao.valid_redirect_uris
+  allowed_redirect_uris = keycloak_openid_client.vault.valid_redirect_uris
   verbose_oidc_logging  = true
 }
 
@@ -233,6 +233,6 @@ resource "vault_audit" "test" {
   type = "file"
 
   options = {
-    file_path = "/openbao/logs/audit.log"
+    file_path = "/vault/logs/audit.log"
   }
 }

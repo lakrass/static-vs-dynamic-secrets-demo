@@ -24,6 +24,7 @@ args:
   - config_file=/etc/postgresql/postgresql.conf
 
 customConfig: |
+  listen_addresses = '*'
   logging_collector = on
   log_statement = 'all'
   log_directory = '/tmp/'

@@ -1,5 +1,6 @@
 server:
   logLevel: debug
+
   standalone:
     enabled: true
     config: |
@@ -12,10 +13,13 @@ server:
       storage "file" {
         path = "/vault/data"
       }
+
   updateStrategyType: RollingUpdate
+
   service:
     type: NodePort
     nodePort: 30082
+
   extraContainers:
     - name: socat-keycloak-ipv4
       image: alpine/socat:1.8.0.3

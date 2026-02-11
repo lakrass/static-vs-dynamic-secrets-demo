@@ -4,5 +4,6 @@ controller:
     nodePorts:
       http: 30080
       https: 30443
+
   ingressClassResource:
     default: true

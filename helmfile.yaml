@@ -3,6 +3,8 @@ repositories:
     url: https://kubernetes.github.io/ingress-nginx
   - name: hashicorp
     url: https://helm.releases.hashicorp.com
+  - name: opensearch
+    url: https://opensearch-project.github.io/helm-charts
 
 releases:
   - name: ingress-nginx
@@ -29,3 +31,15 @@ releases:
     version: 0.13.0
     values:
       - ./values/keycloak.yaml
+  - name: opensearch
+    namespace: opensearch
+    chart: opensearch/opensearch
+    version: 3.4.0
+    values:
+      - ./values/opensearch.yaml
+  - name: opensearch-dashboards
+    namespace: opensearch
+    chart: opensearch/opensearch-dashboards
+    version: 3.4.0
+    values:
+      - ./values/opensearch-dashboards.yaml

@@ -1,17 +1,30 @@
-auth:
-  username: postgres
-  password: postgres
+settings:
+  superuser:
+    value: postgres
+  superuserPassword:
+    value: postgres
 
-customUser:
-  name: keycloak
-  password: keycloak
+userDatabase:
+  name:
+    value: keycloak
+  user:
+    value: keycloak
+  password:
+    value: keycloak
 
 service:
   type: NodePort
+  nodePort: 30432
 
-config:
-  postgresqlLogStatement: all
-  extraConfig:
-    - logging_collector = on
-    - log_directory = '/var/log/postgresql'
-    - log_line_prefix = '%m [%p] %u@%d '
+storage:
+  requestedSize: 1Gi
+
+args:
+  - -c
+  - config_file=/etc/postgresql/postgresql.conf
+
+customConfig: |
+  logging_collector = on
+  log_statement = 'all'
+  log_directory = '/tmp/'
+  log_line_prefix = '%m [%p] %u@%d '

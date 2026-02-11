@@ -5,6 +5,8 @@ repositories:
     url: https://helm.releases.hashicorp.com
   - name: opensearch
     url: https://opensearch-project.github.io/helm-charts
+  - name: groundhog2k
+    url: https://groundhog2k.github.io/helm-charts/
 
 releases:
   - name: ingress-nginx
@@ -21,8 +23,8 @@ releases:
       - ./values/vault.yaml
   - name: postgres
     namespace: postgres
-    chart: oci://registry-1.docker.io/cloudpirates/postgres
-    version: 0.14.4
+    chart: groundhog2k/postgres
+    version: 1.6.1
     values:
       - ./values/postgres.yaml
   - name: keycloak

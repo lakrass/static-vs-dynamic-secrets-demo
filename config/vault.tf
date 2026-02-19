@@ -84,6 +84,7 @@ resource "vault_database_secret_backend_connection" "pg" {
     username       = data.kubernetes_secret_v1.pg_superuser.data.username
     password       = data.kubernetes_secret_v1.pg_superuser.data.password
     connection_url = "postgres://{{username}}:{{password}}@${data.kubernetes_secret_v1.pg_superuser.data.host}.postgres.svc.cluster.local:${data.kubernetes_secret_v1.pg_superuser.data.port}/postgres"
+    username_template = "{{printf \"v_%s_%s\" (.DisplayName | truncate 41) (random 20) | truncate 63 }}"
   }
 
   verify_connection = true

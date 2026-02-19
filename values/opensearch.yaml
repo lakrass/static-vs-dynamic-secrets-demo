@@ -12,3 +12,7 @@ extraEnvs:
 
 persistence:
   size: 200Mi
+
+service:
+  type: NodePort
+  nodePort: 30900

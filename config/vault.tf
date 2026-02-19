@@ -242,6 +242,6 @@ resource "vault_audit" "test" {
   type = "file"
 
   options = {
-    file_path = "/vault/logs/audit.log"
+    file_path = "stdout"
   }
 }

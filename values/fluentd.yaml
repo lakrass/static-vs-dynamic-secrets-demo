@@ -1,0 +1,167 @@
+variant: opensearch
+
+fileConfigs:
+  01_sources.conf: |
+    <system>
+      log_level debug
+    </system>
+
+    <source>
+      @type tail
+      @id in_tail_postgres
+      @label @POSTGRES
+      path /var/log/containers/postgres-cluster-*_postgres_postgres-*.log
+      pos_file /var/log/postgres.log.pos
+      tag postgres.raw
+      read_from_head true
+      <parse>
+        @type cri
+      </parse>
+    </source>
+
+    <source>
+      @type tail
+      @id in_tail_vault
+      @label @VAULT
+      path /var/log/containers/vault-*_vault_vault-*.log
+      pos_file /var/log/vault.log.pos
+      tag vault.raw
+      read_from_head true
+      <parse>
+        @type cri
+      </parse>
+    </source>
+
+    <source>
+      @type prometheus
+      bind 0.0.0.0
+      port 24231
+      metrics_path /metrics
+    </source>
+
+  02_filters.conf: |
+    <label @POSTGRES>
+      <filter postgres.raw>
+        @type parser
+        key_name message
+        reserve_data false
+        remove_key_name_field true
+        <parse>
+          @type json
+        </parse>
+      </filter>
+
+      <filter postgres.raw>
+        @type grep
+        <regexp>
+          key $.logger
+          pattern ^pgaudit$
+        </regexp>
+      </filter>
+
+      <filter postgres.raw>
+        @type record_transformer
+        enable_ruby true
+        <record>
+          ts ${record["ts"] && record["ts"].gsub(/Z\z/, "+00:00")}
+        </record>
+      </filter>
+
+      <match postgres.raw>
+        @type relabel
+        @label @POSTGRES_OUTPUT
+      </match>
+    </label>
+
+    <label @VAULT>
+      <filter vault.raw>
+        @type parser
+        key_name message
+        reserve_data true
+        remove_key_name_field true
+        <parse>
+          @type json
+        </parse>
+      </filter>
+
+      <filter vault.raw>
+        @type record_transformer
+        remove_keys stream,logtag
+      </filter>
+
+      <filter vault.raw>
+        @type grep
+        <regexp>
+          key type
+          pattern ^(request|response)$
+        </regexp>
+      </filter>
+
+      <match vault.raw>
+        @type relabel
+        @label @VAULT_OUTPUT
+      </match>
+    </label>
+
+  03_dispatch.conf: |-
+
+  04_outputs.conf: |
+    <label @POSTGRES_OUTPUT>
+      <match postgres.raw>
+        @type opensearch
+        @id out_os_postgres
+
+        host opensearch-cluster-master.opensearch.svc.cluster.local
+        port 9200
+        scheme https
+        ssl_verify false
+
+        user admin
+        password OpenSearch123#
+
+        index_name postgres
+
+        time_key ts
+        time_key_format %Y-%m-%dT%H:%M:%S.%N%z
+
+        reload_connections false
+        reconnect_on_error true
+        request_timeout 30s
+
+        <buffer>
+          @type memory
+          flush_interval 5s
+          retry_forever true
+        </buffer>
+      </match>
+    </label>
+
+    <label @VAULT_OUTPUT>
+      <match vault.raw>
+        @type opensearch
+        @id out_os_vault
+
+        host opensearch-cluster-master.opensearch.svc.cluster.local
+        port 9200
+        scheme https
+        ssl_verify false
+
+        user admin
+        password OpenSearch123#
+
+        index_name vault
+
+        time_key time
+        time_key_format %Y-%m-%dT%H:%M:%S.%N%z
+
+        reload_connections false
+        reconnect_on_error true
+        request_timeout 30s
+
+        <buffer>
+          @type memory
+          flush_interval 5s
+          retry_forever true
+        </buffer>
+      </match>
+    </label>

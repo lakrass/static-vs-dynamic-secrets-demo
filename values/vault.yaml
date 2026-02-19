@@ -16,6 +16,7 @@ server:
       storage "file" {
         path = "/vault/data"
       }
+      log_format = "json"
 
   updateStrategyType: RollingUpdate
 

@@ -7,6 +7,8 @@ repositories:
     url: https://opensearch-project.github.io/helm-charts
   - name: cloudnative-pg
     url: https://cloudnative-pg.github.io/charts
+  - name: fluent
+    url: https://fluent.github.io/helm-charts
 
 releases:
   - name: ingress-nginx
@@ -25,6 +27,7 @@ releases:
     namespace: postgres
     chart: cloudnative-pg/cloudnative-pg
     version: 0.27.1
+    wait: true
   - name: postgres
     namespace: postgres
     chart: cloudnative-pg/cluster
@@ -53,3 +56,9 @@ releases:
       - ./values/opensearch-dashboards.yaml
     needs:
       - opensearch/opensearch
+  - name: fluentd
+    namespace: fluentd
+    chart: fluent/fluentd
+    version: 0.5.3
+    values:
+      - ./values/fluentd.yaml

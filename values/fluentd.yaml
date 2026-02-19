@@ -33,6 +33,19 @@ fileConfigs:
     </source>
 
     <source>
+      @type tail
+      @id in_tail_keycloak
+      @label @KEYCLOAK
+      path /var/log/containers/keycloak-*_keycloak_keycloak-*.log
+      pos_file /var/log/keycloak.log.pos
+      tag keycloak.raw
+      read_from_head true
+      <parse>
+        @type cri
+      </parse>
+    </source>
+
+    <source>
       @type prometheus
       bind 0.0.0.0
       port 24231
@@ -103,6 +116,39 @@ fileConfigs:
       </match>
     </label>
 
+    <label @KEYCLOAK>
+      <filter keycloak.raw>
+        @type parser
+        key_name message
+        reserve_data false
+        remove_key_name_field true
+        <parse>
+          @type json
+        </parse>
+      </filter>
+
+      <filter keycloak.raw>
+        @type grep
+        <regexp>
+          key loggerName
+          pattern ^org.keycloak.events$
+        </regexp>
+      </filter>
+
+      <filter postgres.raw>
+        @type record_transformer
+        enable_ruby true
+        <record>
+          timestamp ${record["timestamp"] && record["timestamp"].gsub(/Z\z/, "+00:00")}
+        </record>
+      </filter>
+
+      <match keycloak.raw>
+        @type relabel
+        @label @KEYCLOAK_OUTPUT
+      </match>
+    </label>
+
   03_dispatch.conf: |-
 
   04_outputs.conf: |
@@ -152,6 +198,36 @@ fileConfigs:
         index_name vault
 
         time_key time
+        time_key_format %Y-%m-%dT%H:%M:%S.%N%z
+
+        reload_connections false
+        reconnect_on_error true
+        request_timeout 30s
+
+        <buffer>
+          @type memory
+          flush_interval 5s
+          retry_forever true
+        </buffer>
+      </match>
+    </label>
+
+    <label @KEYCLOAK_OUTPUT>
+      <match keycloak.raw>
+        @type opensearch
+        @id out_os_keycloak
+
+        host opensearch-cluster-master.opensearch.svc.cluster.local
+        port 9200
+        scheme https
+        ssl_verify false
+
+        user admin
+        password OpenSearch123#
+
+        index_name keycloak
+
+        time_key timestamp
         time_key_format %Y-%m-%dT%H:%M:%S.%N%z
 
         reload_connections false

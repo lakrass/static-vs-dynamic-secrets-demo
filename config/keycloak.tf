@@ -7,10 +7,7 @@ resource "keycloak_realm" "demo" {
 resource "keycloak_realm_events" "realm_events" {
   realm_id = keycloak_realm.demo.id
 
-  # Enable user events
   events_enabled = true
-
-  # Enable admin events
   admin_events_enabled         = true
   admin_events_details_enabled = true
 

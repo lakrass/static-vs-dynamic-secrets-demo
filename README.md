@@ -47,7 +47,7 @@ When using `direnv` in addition, it will detect the provided `.envrc` file in th
 
 4. Run `vault login` and you will be prompted fo a token. Use the root token provided in the saved output.
 
-### Configure Vault
+### Configure the demo components
 
 Run all following commands inside the directory `config`.
 
@@ -55,8 +55,11 @@ Run all following commands inside the directory `config`.
 
 2. Run `terraform apply -auto-approve`.
 
-Check out https://localhost:8200 and login with the root token from the previous steps, if you want to inspect the configuration from the Vault UI.
+Check out http://localhost:8200 and login with the root token from the previous steps, if you want to inspect the configuration from the Vault UI.
 
-## Check the Demos
+### Add OpenSearch objects
 
-TBC
+In OpenSearch Dashboards (http://localhost:5601) use the sidebar to navigate to
+"Management" -> "Dashboards Management" and then goto "Saved objects".  
+Click on "Import" and select the file `examples/opensearch.ndjson`, again hit "Import".  
+Now you will be abled to load the pre-saved search "Vault", "Keycloak" and "Postgres".

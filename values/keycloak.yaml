@@ -3,14 +3,9 @@ keycloak:
   adminUser: admin
   adminPassword: admin
 
-ingress:
-  enabled: true
-  className: nginx
-  hosts:
-    - host: localhost
-      paths:
-        - path: /
-          pathType: Prefix
+service:
+  type: NodePort
+  httpNodePort: 30080
 
 persistence:
   enabled: true

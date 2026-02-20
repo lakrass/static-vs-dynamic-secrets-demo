@@ -1,6 +1,4 @@
 repositories:
-  - name: ingress-nginx
-    url: https://kubernetes.github.io/ingress-nginx
   - name: hashicorp
     url: https://helm.releases.hashicorp.com
   - name: opensearch
@@ -11,12 +9,6 @@ repositories:
     url: https://fluent.github.io/helm-charts
 
 releases:
-  - name: ingress-nginx
-    namespace: ingress-nginx
-    chart: ingress-nginx/ingress-nginx
-    version: 4.14.1
-    values:
-      - ./values/ingress-nginx.yaml
   - name: vault
     namespace: vault
     chart: hashicorp/vault
@@ -39,7 +31,7 @@ releases:
   - name: keycloak
     namespace: keycloak
     chart: oci://registry-1.docker.io/cloudpirates/keycloak
-    version: 0.13.0
+    version: 0.16.2
     values:
       - ./values/keycloak.yaml
   - name: opensearch
